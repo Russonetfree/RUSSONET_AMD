@@ -16,27 +16,22 @@ systemctl daemon-reload
 
 echo "[2/6] Eliminando archivos del panel, scripts y ejecutables..."
 rm -rf /etc/adm-lite /etc/ADMcgh /etc/v2ray_util /usr/local/bin/ws_proxy.py /usr/local/bin/badvpn-udpgw
-rm -f /usr/bin/menu /usr/bin/adm /usr/bin/ejecutar /bin/ejecutar /usr/bin/autolim /usr/bin/autostart
+rm -rf /usr/bin/menu /usr/bin/adm /usr/bin/ejecutar /bin/ejecutar /usr/bin/autolim /usr/bin/autostart
 rm -f /etc/russo_installed /etc/russo_passwords.txt /etc/versin_script* /etc/version_instalacion
 rm -f /root/puertos.sh /root/usuarios.db /root/stilos.log /root/proxy.log /root/limpieza.log /root/name /root/speed /root/instalar.sh
 
 echo "[3/6] Limpiando rastros visuales, logos y banners (VPS MX, CHUMO, etc.)..."
-# Restaurar archivos de mensaje del día e inicio de sesión
 > /etc/issue
 > /etc/issue.net
 > /etc/motd
 > /etc/banner
-
-# Eliminar scripts de MOTD personalizados si existen
 rm -f /etc/update-motd.d/99-banner 2>/dev/null
 
-# Limpiar llamada automática al menú en .bashrc y .profile
 sed -i '/^menu$/d' /root/.bashrc
 sed -i '/^adm$/d' /root/.bashrc
 sed -i '/adm-lite/d' /root/.bashrc
 sed -i '/^menu$/d' /root/.profile 2>/dev/null
 
-# Restaurar configuración por defecto de SSH (quitar Banner personalizado)
 sed -i 's|^Banner.*|#Banner none|' /etc/ssh/sshd_config
 systemctl restart ssh 2>/dev/null || systemctl restart sshd 2>/dev/null
 
