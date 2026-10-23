@@ -16,22 +16,24 @@ systemctl daemon-reload
 
 echo "[2/6] Eliminando archivos del panel, scripts y ejecutables..."
 rm -rf /etc/adm-lite /etc/ADMcgh /etc/v2ray_util /usr/local/bin/ws_proxy.py /usr/local/bin/badvpn-udpgw
-rm -rf /usr/bin/menu /usr/bin/adm /usr/bin/ejecutar /bin/ejecutar /usr/bin/autolim /usr/bin/autostart
+rm -rf /usr/bin/menu /usr/bin/adm /usr/bin/ejecutar /bin/ejecutar /usr/bin/autolim /usr/bin/autostart /usr/bin/cgh
 rm -f /etc/russo_installed /etc/russo_passwords.txt /etc/versin_script* /etc/version_instalacion
 rm -f /root/puertos.sh /root/usuarios.db /root/stilos.log /root/proxy.log /root/limpieza.log /root/name /root/speed /root/instalar.sh
 
-echo "[3/6] Limpiando rastros visuales, logos y banners (VPS MX, CHUMO, etc.)..."
+echo "[3/6] Eliminando logos, banners y rastros en .bashrc (ChumoGH, VPS MX, etc.)..."
+# Vaciar archivos de banner globales
 > /etc/issue
 > /etc/issue.net
 > /etc/motd
 > /etc/banner
 rm -f /etc/update-motd.d/99-banner 2>/dev/null
+rm -f /etc/profile.d/cgh.sh /etc/profile.d/chumo*.sh 2>/dev/null
 
-sed -i '/^menu$/d' /root/.bashrc
-sed -i '/^adm$/d' /root/.bashrc
-sed -i '/adm-lite/d' /root/.bashrc
-sed -i '/^menu$/d' /root/.profile 2>/dev/null
+# Restaurar .bashrc y .profile originales limpios
+cp /etc/skel/.bashrc /root/.bashrc
+cp /etc/skel/.profile /root/.profile
 
+# Eliminar llamada a banners e inicio de sesión SSH
 sed -i 's|^Banner.*|#Banner none|' /etc/ssh/sshd_config
 systemctl restart ssh 2>/dev/null || systemctl restart sshd 2>/dev/null
 
